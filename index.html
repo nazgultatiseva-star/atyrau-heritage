@@ -1,0 +1,1153 @@
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- FontAwesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<!-- QR Code Generator -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+    :root {
+        --primary-blue: #024b86;
+        --primary-dark: #013561;
+        --bg-gray: #f4f6f9;
+        --text-dark: #2c3e50;
+        --text-muted: #7f8c8d;
+        --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        --border-radius: 12px;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+        background-color: var(--bg-gray);
+        color: var(--text-dark);
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Top Header Navigation */
+    header {
+        background-color: var(--primary-blue);
+        color: white;
+        padding: 10px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .logo-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .logo-icon {
+        font-size: 28px;
+        color: #f1c40f;
+    }
+
+    .logo-title h1 {
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        line-height: 1.1;
+    }
+
+    .logo-title p {
+        font-size: 11px;
+        opacity: 0.8;
+    }
+
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        opacity: 0.9;
+        transition: opacity 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+        opacity: 1;
+        font-weight: 600;
+    }
+
+    .lang-select {
+        background: rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.4);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        outline: none;
+        font-weight: 600;
+    }
+
+    .lang-select option {
+        color: #333;
+        background: white;
+    }
+
+    /* Banner Hero Section */
+    .hero-banner {
+        position: relative;
+        background: linear-gradient(rgba(1, 53, 97, 0.75), rgba(1, 53, 97, 0.85)), 
+                    url('https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=1600') center/cover no-repeat;
+        color: white;
+        padding: 45px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .hero-text h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .hero-text p {
+        font-size: 14px;
+        opacity: 0.85;
+    }
+
+    .hero-quote {
+        text-align: right;
+        font-style: italic;
+        font-size: 14px;
+        max-width: 320px;
+        opacity: 0.9;
+        border-right: 3px solid #f1c40f;
+        padding-right: 12px;
+    }
+
+    /* Main Container */
+    .main-container {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Stat Grid Header */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: var(--card-shadow);
+    }
+
+    .stat-icon-wrapper {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .stat-1 .stat-icon-wrapper { background: #eef5ff; color: #1e88e5; }
+    .stat-2 .stat-icon-wrapper { background: #e8f8f5; color: #26a69a; }
+    .stat-3 .stat-icon-wrapper { background: #f3e5f5; color: #8e24aa; }
+    .stat-4 .stat-icon-wrapper { background: #fff8e1; color: #f57f17; }
+
+    .stat-number {
+        font-size: 26px;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 4px;
+        color: #1a252f;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #34495e;
+    }
+
+    .stat-sublabel {
+        font-size: 10px;
+        color: var(--text-muted);
+    }
+
+    /* Main Layout Grid */
+    .content-layout {
+        display: grid;
+        grid-template-columns: 2.3fr 1fr;
+        gap: 20px;
+    }
+
+    /* Map Section Card */
+    .map-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 20px;
+        box-shadow: var(--card-shadow);
+    }
+
+    .map-card-header {
+        margin-bottom: 12px;
+    }
+
+    .map-card-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .map-card-subtitle {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 2px;
+    }
+
+    .map-controls-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .filter-buttons {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .filter-btn {
+        background: #f0f3f6;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #546e7a;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+        background: var(--primary-blue);
+        color: white;
+    }
+
+    .search-box {
+        position: relative;
+        flex-grow: 1;
+        max-width: 260px;
+    }
+
+    .search-box input {
+        width: 100%;
+        padding: 8px 12px 8px 32px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        font-size: 12px;
+        outline: none;
+    }
+
+    .search-box i {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    .map-container-relative {
+        position: relative;
+        height: 420px;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #e2e8f0;
+    }
+
+    #leafletMap {
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Map Legend Overlay */
+    .map-legend {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 10px 12px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        z-index: 400;
+        font-size: 11px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #475569;
+        font-weight: 500;
+    }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    /* Floating Info Card on Map */
+    .map-info-popup {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 310px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        z-index: 500;
+        overflow: hidden;
+        display: none;
+    }
+
+    .popup-img-wrapper {
+        position: relative;
+        height: 130px;
+    }
+
+    .popup-img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .popup-close-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: white;
+        border: none;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .popup-details {
+        padding: 12px;
+    }
+
+    .popup-details h4 {
+        font-size: 15px;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+    }
+
+    .popup-meta-line {
+        font-size: 11px;
+        color: #64748b;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .popup-description {
+        font-size: 11px;
+        color: #475569;
+        margin: 8px 0;
+        line-height: 1.35;
+    }
+
+    .popup-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .btn-main {
+        flex: 1;
+        background: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 8px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .btn-outline {
+        background: white;
+        color: var(--primary-blue);
+        border: 1px solid var(--primary-blue);
+        padding: 8px 10px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* Right Sidebar Card */
+    .sidebar-card {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 20px;
+        box-shadow: var(--card-shadow);
+    }
+
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .sidebar-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .sidebar-title i {
+        color: #f59e0b;
+    }
+
+    .link-all {
+        font-size: 11px;
+        color: var(--primary-blue);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .popular-items-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .popular-item-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #f1f5f9;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .popular-item-row:hover {
+        background: #f8fafc;
+        border-color: #cbd5e1;
+    }
+
+    .popular-item-thumb {
+        width: 50px;
+        height: 50px;
+        border-radius: 6px;
+        object-fit: cover;
+    }
+
+    .popular-item-info {
+        flex: 1;
+    }
+
+    .popular-item-info h5 {
+        font-size: 13px;
+        color: var(--text-dark);
+        margin-bottom: 2px;
+    }
+
+    .popular-item-info p {
+        font-size: 10px;
+        color: var(--text-muted);
+    }
+
+    .popular-item-arrow {
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    /* Modal Windows */
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(3px);
+        z-index: 2000;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+    }
+
+    .modal-body {
+        background: white;
+        padding: 22px;
+        border-radius: 16px;
+        text-align: center;
+        max-width: 340px;
+        width: 100%;
+    }
+
+    .qr-canvas-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 15px 0;
+        padding: 10px;
+        background: #f8fafc;
+        border-radius: 8px;
+        min-height: 180px;
+    }
+
+    .qr-canvas-box canvas, .qr-canvas-box img {
+        margin: 0 auto;
+        display: block;
+    }
+
+    .btn-modal-close {
+        background: #e2e8f0;
+        border: none;
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #475569;
+        cursor: pointer;
+    }
+
+    @media (max-width: 992px) {
+        .content-layout { grid-template-columns: 1fr; }
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        header { padding: 10px 20px; }
+        .hero-banner { padding: 30px 20px; flex-direction: column; align-items: flex-start; gap: 15px; }
+        .hero-quote { text-align: left; border-right: none; border-left: 3px solid #f1c40f; padding-left: 12px; }
+    }
+
+    @media (max-width: 576px) {
+        .stats-grid { grid-template-columns: 1fr; }
+        nav { display: none; }
+    }
+</style>
+
+
+<!-- Header Navigation -->
+<header>
+    <div class="logo-area">
+        <i class="fa-solid fa-landmark-dome logo-icon"></i>
+        <div class="logo-title">
+            <h1>ATYRAU HERITAGE</h1>
+            <p id="ui-sublogo">Атырау өңірінің тарихи мұрасы</p>
+        </div>
+    </div>
+    <nav>
+        <a href="#" class="active"><i class="fa-solid fa-house"></i> <span id="ui-nav-home">Басты бет</span></a>
+        <a href="#"><i class="fa-solid fa-map"></i> <span id="ui-nav-map">Карта</span></a>
+        <a href="#"><i class="fa-solid fa-list-check"></i> <span id="ui-nav-objects">Нысандар</span></a>
+        <a href="#"><i class="fa-solid fa-clock-rotate-left"></i> <span id="ui-nav-time">Уақыт</span></a>
+        <a href="#"><i class="fa-solid fa-user-ninja"></i> <span id="ui-nav-detective">Детектив</span></a>
+        
+        <!-- Language Selector Switcher -->
+        <select class="lang-select" id="langSelector" onchange="changeLanguage(this.value)">
+            <option value="kk">Қазақша</option>
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+        </select>
+    </nav>
+</header>
+
+<!-- Hero Banner -->
+<section class="hero-banner">
+    <div class="hero-text">
+        <h2 id="ui-hero-title">Атырау тарихи мұрасы</h2>
+        <p id="ui-hero-desc">Өткенді зертте. Мұраны сақта. Болашаққа жеткіз.</p>
+    </div>
+    <div class="hero-quote" id="ui-hero-quote">
+        «Тарихты білу — елді сүюдің бір көрінісі.»
+    </div>
+</section>
+
+<!-- Main Content Layout -->
+<div class="main-container">
+
+    <!-- Top Statistics Grid -->
+    <div class="stats-grid">
+        <div class="stat-card stat-1">
+            <div class="stat-icon-wrapper"><i class="fa-solid fa-landmark"></i></div>
+            <div>
+                <div class="stat-number">313</div>
+                <div class="stat-label" id="ui-stat1-title">тарихи-мәдени нысан</div>
+                <div class="stat-sublabel" id="ui-stat1-sub">(Атырау облысы бойынша)</div>
+            </div>
+        </div>
+
+        <div class="stat-card stat-2">
+            <div class="stat-icon-wrapper"><i class="fa-solid fa-gem"></i></div>
+            <div>
+                <div class="stat-number">171</div>
+                <div class="stat-label" id="ui-stat2-title">археологиялық ескерткіш</div>
+                <div class="stat-sublabel" id="ui-stat2-sub">(Атырау облысы бойынша)</div>
+            </div>
+        </div>
+
+        <div class="stat-card stat-3">
+            <div class="stat-icon-wrapper"><i class="fa-solid fa-list-ol"></i></div>
+            <div>
+                <div class="stat-number">15</div>
+                <div class="stat-label" id="ui-stat3-title">жобада зерттелген нысан</div>
+                <div class="stat-sublabel" id="ui-stat3-sub">(интерактивті картада)</div>
+            </div>
+        </div>
+
+        <div class="stat-card stat-4">
+            <div class="stat-icon-wrapper"><i class="fa-solid fa-infinity"></i></div>
+            <div>
+                <div class="stat-number">∞</div>
+                <div class="stat-label" id="ui-stat4-title">тарихи дерек</div>
+                <div class="stat-sublabel" id="ui-stat4-sub">(жинақталған ақпарат)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="content-layout">
+
+        <!-- Interactive Map Area -->
+        <div class="map-card">
+            <div class="map-card-header">
+                <div class="map-card-title"><i class="fa-solid fa-map-location-dot" style="color: var(--primary-blue);"></i> <span id="ui-map-title">Тарихи карта</span></div>
+                <div class="map-card-subtitle" id="ui-map-subtitle">Картадан тарихи нысанды таңдаңыз. Толық ақпарат, фото, тарихы және қазіргі жағдайы көрсетіледі.</div>
+            </div>
+
+            <div class="map-controls-row">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="applyFilter('all', this)"><i class="fa-solid fa-border-all"></i> <span id="ui-btn-all">Барлығы</span></button>
+                    <button class="filter-btn" onclick="applyFilter('ancient', this)"><i class="fa-solid fa-landmark"></i> <span id="ui-btn-ancient">Ежелгі дәуір</span></button>
+                    <button class="filter-btn" onclick="applyFilter('middle', this)"><i class="fa-solid fa-fort-awesome"></i> <span id="ui-btn-middle">Орта ғасыр</span></button>
+                    <button class="filter-btn" onclick="applyFilter('modern', this)"><i class="fa-solid fa-clock"></i> <span id="ui-btn-modern">XVIII-XX ғғ.</span></button>
+                </div>
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="mapSearchInput" placeholder="Издеу..." onkeyup="searchObjects()">
+                </div>
+            </div>
+
+            <div class="map-container-relative">
+                <div id="leafletMap"></div>
+
+                <!-- Map Legend Overlay -->
+                <div class="map-legend">
+                    <div class="legend-item"><div class="legend-dot" style="background:#26a69a;"></div> <span id="ui-lg-arch">Археологиялық ескерткіш</span></div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#e53935;"></div> <span id="ui-lg-city">Ортағасырлық қала</span></div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#8e24aa;"></div> <span id="ui-lg-relig">Дини нысан</span></div>
+                    <div class="legend-item"><div class="legend-dot" style="background:#fb8c00;"></div> <span id="ui-lg-person">Тарихи тұлға</span></div>
+                </div>
+
+                <!-- Selected Object Card Popup on Map -->
+                <div class="map-info-popup" id="mapInfoPopup">
+                    <button class="popup-close-btn" onclick="closePopup()"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="popup-img-wrapper">
+                        <img id="popImage" src="" alt="Нысан суреті">
+                    </div>
+                    <div class="popup-details">
+                        <h4 id="popTitle">Сарайшық қалашығы</h4>
+                        <div class="popup-meta-line"><i class="fa-solid fa-location-dot"></i> <span id="ui-lbl-loc">Орналасуы</span>: <span id="popLoc">Жайық өзені бойы</span></div>
+                        <div class="popup-meta-line"><i class="fa-solid fa-calendar-days"></i> <span id="ui-lbl-era">Кезеңі</span>: <span id="popEra">XIII-XVI ғғ.</span></div>
+                        <div class="popup-meta-line"><i class="fa-solid fa-tag"></i> <span id="ui-lbl-type">Түрі</span>: <span id="popType">Ортағасырлық қала</span></div>
+                        <p class="popup-description" id="popDesc">Сарайшық — Жайық бойындағы ірі сауда және саяси орталық болған қала.</p>
+                        <div class="popup-actions">
+                            <button class="btn-main" id="btnFullInfo"><i class="fa-solid fa-circle-info"></i> <span id="ui-btn-full">Толық ақпарат</span> &rarr;</button>
+                            <button class="btn-outline" id="btnQRCode"><i class="fa-solid fa-qrcode"></i> QR-код</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar: Popular Sites -->
+        <div class="sidebar-card">
+            <div class="sidebar-header">
+                <div class="sidebar-title"><i class="fa-solid fa-star"></i> <span id="ui-sidebar-title">Танымал нысандар</span></div>
+                <a href="#" class="link-all" id="ui-link-all">Барлығын көру &rarr;</a>
+            </div>
+            <div class="popular-items-list" id="popularItemsList">
+                <!-- Dynamic Items -->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- QR Code Modal -->
+<div class="modal-overlay" id="qrModalOverlay">
+    <div class="modal-body">
+        <h3 id="qrModalTitle" style="font-size: 15px; color: #1e293b; margin-bottom: 4px;"></h3>
+        <p id="qrModalMeta" style="font-size: 11px; color: #64748b; margin-bottom: 8px;"></p>
+
+        <div class="qr-canvas-box" id="qrcodeCanvas"></div>
+
+        <p style="font-size: 11px; color: #475569; margin-bottom: 12px;" id="ui-qr-instruction">
+            QR-кодты телефон камерасымен сканерлеңіз.
+        </p>
+        <button class="btn-modal-close" onclick="closeQRModal()" id="ui-btn-qr-close">Жабу</button>
+    </div>
+</div>
+
+<!-- Full Info Modal -->
+<div class="modal-overlay" id="infoModalOverlay">
+    <div class="modal-body" style="max-width: 480px; text-align: left;">
+        <h3 id="infoModalTitle" style="font-size: 18px; color: #1e293b; margin-bottom: 8px;"></h3>
+        <p id="infoModalMeta" style="font-size: 12px; color: var(--primary-blue); font-weight: 600; margin-bottom: 12px;"></p>
+        <p id="infoModalText" style="font-size: 13px; color: #334155; line-height: 1.5; margin-bottom: 18px; text-align: justify;"></p>
+        <button class="btn-modal-close" onclick="closeInfoModal()" id="ui-btn-info-close">Жабу</button>
+    </div>
+</div>
+
+<script>
+    // --- TRANSLATIONS DICTIONARY ---
+    const translations = {
+        kk: {
+            sublogo: "Атырау өңірінің тарихи мұрасы",
+            nav_home: "Басты бет",
+            nav_map: "Карта",
+            nav_objects: "Нысандар",
+            nav_time: "Уақыт",
+            nav_detective: "Детектив",
+            hero_title: "Атырау тарихи мұрасы",
+            hero_desc: "Өткенді зертте. Мұраны сақта. Болашаққа жеткіз.",
+            hero_quote: "«Тарихты білу — елді сүюдің бір көрінісі.»",
+            stat1_title: "тарихи-мәдени нысан", stat1_sub: "(Атырау облысы бойынша)",
+            stat2_title: "археологиялық ескерткіш", stat2_sub: "(Атырау облысы бойынша)",
+            stat3_title: "жобада зерттелген нысан", stat3_sub: "(интерактивті картада)",
+            stat4_title: "тарихи дерек", stat4_sub: "(жинақталған ақпарат)",
+            map_title: "Тарихи карта",
+            map_subtitle: "Картадан тарихи нысанды таңдаңыз. Толық ақпарат, фото, тарихы және қазіргі жағдайы көрсетіледі.",
+            btn_all: "Барлығы", btn_ancient: "Ежелгі дәуір", btn_middle: "Орта ғасыр", btn_modern: "XVIII-XX ғғ.",
+            search_ph: "Издеу...",
+            lg_arch: "Археологиялық ескерткіш", lg_city: "Ортағасырлық қала", lg_relig: "Дини нысан", lg_person: "Тарихи тұлға",
+            lbl_loc: "Орналасуы", lbl_era: "Кезеңі", lbl_type: "Түрі",
+            btn_full: "Толық ақпарат", sidebar_title: "Танымал нысандар", link_all: "Барлығын көру →",
+            qr_instruction: "QR-кодты телефон камерасымен сканерлеңіз.", btn_close: "Жабу"
+        },
+        ru: {
+            sublogo: "Историческое наследие Атырауской области",
+            nav_home: "Главная",
+            nav_map: "Карта",
+            nav_objects: "Объекты",
+            nav_time: "Время",
+            nav_detective: "Детектив",
+            hero_title: "Историческое наследие Атырау",
+            hero_desc: "Изучай прошлое. Сохраняй наследие. Передай будущему.",
+            hero_quote: "«Знание истории — одно из проявлений любви к родине.»",
+            stat1_title: "историко-культурных объектов", stat1_sub: "(по Атырауской области)",
+            stat2_title: "археологических памятников", stat2_sub: "(по Атырауской области)",
+            stat3_title: "объектов в проекте", stat3_sub: "(на интерактивной карте)",
+            stat4_title: "исторических фактов", stat4_sub: "(собранные данные)",
+            map_title: "Историческая карта",
+            map_subtitle: "Выберите исторический объект на карте. Доступна подробная информация, фото и история.",
+            btn_all: "Все", btn_ancient: "Древняя эра", btn_middle: "Средние века", btn_modern: "XVIII-XX вв.",
+            search_ph: "Поиск...",
+            lg_arch: "Археологический памятник", lg_city: "Средневековый город", lg_relig: "Религиозный объект", lg_person: "Историческая личность",
+            lbl_loc: "Локация", lbl_era: "Период", lbl_type: "Тип",
+            btn_full: "Подробнее", sidebar_title: "Популярные объекты", link_all: "Смотреть все →",
+            qr_instruction: "Отсканируйте QR-код камерой телефона.", btn_close: "Закрыть"
+        },
+        en: {
+            sublogo: "Historical Heritage of Atyrau Region",
+            nav_home: "Home",
+            nav_map: "Map",
+            nav_objects: "Objects",
+            nav_time: "Timeline",
+            nav_detective: "Detective",
+            hero_title: "Atyrau Heritage",
+            hero_desc: "Explore the past. Preserve the heritage. Pass it to the future.",
+            hero_quote: "«Knowing history is a manifestation of love for one's country.»",
+            stat1_title: "historical & cultural sites", stat1_sub: "(across Atyrau region)",
+            stat2_title: "archaeological monuments", stat2_sub: "(across Atyrau region)",
+            stat3_title: "studied objects in project", stat3_sub: "(on interactive map)",
+            stat4_title: "historical records", stat4_sub: "(collected information)",
+            map_title: "Historical Map",
+            map_subtitle: "Select a historical object on the map to view detailed information, photos, and history.",
+            btn_all: "All", btn_ancient: "Ancient Era", btn_middle: "Middle Ages", btn_modern: "18th-20th C.",
+            search_ph: "Search...",
+            lg_arch: "Archaeological monument", lg_city: "Medieval city", lg_relig: "Religious site", lg_person: "Historical figure",
+            lbl_loc: "Location", lbl_era: "Era", lbl_type: "Type",
+            btn_full: "Full Details", sidebar_title: "Popular Sites", link_all: "View All →",
+            qr_instruction: "Scan the QR code with your phone camera.", btn_close: "Close"
+        }
+    };
+
+    // --- HERITAGE OBJECTS DATA WITH MULTI-LANGUAGE SUPPORT ---
+    const heritageObjects = [
+        {
+            id: 1, eraType: "middle", color: "#e53935", distText: "12 km",
+            lat: 47.4586, lng: 51.6258,
+            img: "https://images.unsplash.com/photo-1564507592333-c60657eea523?q=80&w=600",
+            kk: {
+                name: "Сарайшық қалашығы", district: "Махамбет ауданы, Жайық өзені бойы", era: "XIII–XVI ғғ.", type: "Ортағасырлық қала",
+                desc: "Сарайшық — Жайық бойындағы ірі сауда және саяси орталық болған қала.",
+                fullDetail: "Сарайшық — Ұлы Жібек жолы бойында орналасқан ортағасырлық ірі қала. Бұл шаһар Алтын Орданың, кейін Ноғай Ордасының саяси, сауда-экономикалық және рухани орталығы болды."
+            },
+            ru: {
+                name: "Городище Сарайшык", district: "Махамбетский район, река Урал", era: "XIII–XVI вв.", type: "Средневековый город",
+                desc: "Сарайшык — крупный торговый и политический центр на реке Урал.",
+                fullDetail: "Сарайшык — крупный средневековый город на Великом шелковом пути. Город являлся политическим и духовным центром Золотой Орды и Ногайской Орды."
+            },
+            en: {
+                name: "Saraishyk Settlement", district: "Makhambet district, Ural river", era: "13th–16th C.", type: "Medieval City",
+                desc: "Saraishyk was a major trade and political hub along the Ural river.",
+                fullDetail: "Saraishyk was a significant medieval city along the Silk Road. It served as a political, economic, and cultural center for the Golden Horde and Nogai Horde."
+            }
+        },
+        {
+            id: 2, eraType: "middle", color: "#e53935", distText: "34 km",
+            lat: 47.1500, lng: 51.9500,
+            img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?q=80&w=600",
+            kk: {
+                name: "Ақтөбе-Лаэти қалашығы", district: "Атырау қаласының маңы", era: "XIII–XV ғғ.", type: "Ортағасырлық қала",
+                desc: "Ортағасырлық қалалық мәдениет пен қолөнер орталығының қалдығы.",
+                fullDetail: "Ақтөбе-Лаэти қалашығы — Атырау қаласының маңында орналасқан XIII-XV ғасырларға жататын археологиялық ескерткіш."
+            },
+            ru: {
+                name: "Городище Актобе-Лаэти", district: "Окраина города Атырау", era: "XIII–XV вв.", type: "Средневековый город",
+                desc: "Остатки средневековой городской культуры и центра ремесел.",
+                fullDetail: "Городище Актобе-Лаэти — археологический памятник XIII-XV веков вблизи города Атырау."
+            },
+            en: {
+                name: "Aktobe-Laeti Settlement", district: "Suburbs of Atyrau city", era: "13th–15th C.", type: "Medieval City",
+                desc: "Remnants of medieval urban culture and craftsmanship center.",
+                fullDetail: "Aktobe-Laeti settlement is an archaeological site dating back to 13th-15th centuries located near Atyrau city."
+            }
+        },
+        {
+            id: 3, eraType: "ancient", color: "#26a69a", distText: "45 km",
+            lat: 46.8500, lng: 53.1000,
+            img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600",
+            kk: {
+                name: "Аралтөбе қорғандары", district: "Жылыой ауданы, Майкомген ауылы", era: "б.з.б. II ғ. – б.з. II ғ.", type: "Археологиялық ескерткіш",
+                desc: "Сарматтар кезеңінің екінші «Алтын адамы» табылған орын.",
+                fullDetail: "Аралтөбе қорғанынан екінші «Алтын адам» — сармат көсемінің сүйегі мен оның алтынмен апталған киімі табылды."
+            },
+            ru: {
+                name: "Курганы Аралтобе", district: "Жылыойский район, с. Майкомген", era: "II в. до н.э. – II в. н.э.", type: "Археологический памятник",
+                desc: "Место находки второго «Золотого человека» сарматского периода.",
+                fullDetail: "В кургане Аралтобе был найден второй «Золотой человек» — останки сарматского вождя в золотом одеянии."
+            },
+            en: {
+                name: "Araltobe Mounds", district: "Zhylyoi district, Maikomgen v.", era: "2nd C. BCE – 2nd C. CE", type: "Archaeological Monument",
+                desc: "The discovery site of the second Sarmatian Golden Man.",
+                fullDetail: "Araltobe burial mound yielded the second 'Golden Man' — remains of a Sarmatian leader with gilded armor and weapons."
+            }
+        },
+        {
+            id: 4, eraType: "modern", color: "#8e24aa", distText: "60 km",
+            lat: 46.9500, lng: 53.3000,
+            img: "https://images.unsplash.com/photo-1548625149-fc4a29cf7092?q=80&w=600",
+            kk: {
+                name: "Құлшан ата жер асты мешіті", district: "Жылыой ауданы, Құлсары маңы", era: "XVIII–XX ғғ.", type: "Дини нысан",
+                desc: "Жартасқа үңгіп жасалған киелі жер асты сәулет ескерткіші.",
+                fullDetail: "Құлшан ата жер асты мешіті — Батыс Қазақстандағы сирек кездесетін сакралды сәулет өнерінің үлгісі."
+            },
+            ru: {
+                name: "Подземная мечеть Кулшан ата", district: "Жылыойский район, близ Кульсары", era: "XVIII–XX вв.", type: "Религиозный объект",
+                desc: "Священный подземный архитектурный памятник, вырубленный в скале.",
+                fullDetail: "Подземная мечеть Кулшан ата — уникальный образец сакральной архитектуры Западного Казахстана."
+            },
+            en: {
+                name: "Kulshan Ata Underground Mosque", district: "Zhylyoi district, near Kulsary", era: "18th–20th C.", type: "Religious Site",
+                desc: "Sacred underground architecture carved directly into chalk rocks.",
+                fullDetail: "Kulshan Ata Underground Mosque represents a rare example of sacred architecture in Western Kazakhstan."
+            }
+        },
+        {
+            id: 5, eraType: "modern", color: "#8e24aa", distText: "78 km",
+            lat: 46.9000, lng: 53.5000,
+            img: "https://images.unsplash.com/photo-1590076175571-4b5459efb08c?q=80&w=600",
+            kk: {
+                name: "Ақмешіт (Бекет ата)", district: "Жылыой ауданы, Ақкөл округі", era: "XVIII–XX ғғ.", type: "Дини нысан",
+                desc: "Бекет ата салдырған алғашқы мешіттер мен бала оқытқан медресе орны.",
+                fullDetail: "Ақмешіт — Бекет ата Мырзағұлұлының ағартушылық және діни қызметін бастаған киелі орны."
+            },
+            ru: {
+                name: "Акмечеть (Бекет ата)", district: "Жылыойский район, округ Акколь", era: "XVIII–XX вв.", type: "Религиозный объект",
+                desc: "Первые мечети и медресе, построенные Бекет ата.",
+                fullDetail: "Акмечеть — святое место, где начиналась просветительская деятельность великого суфия Бекет ата."
+            },
+            en: {
+                name: "Akmeshit (Beket Ata)", district: "Zhylyoi district, Akkol area", era: "18th–20th C.", type: "Religious Site",
+                desc: "Early mosque and madrasa established by Beket Ata.",
+                fullDetail: "Akmeshit is a sacred complex where saint Beket Ata started his educational and spiritual journey."
+            }
+        }
+    ];
+
+    let currentLang = 'kk';
+    let map;
+    let mapMarkers = [];
+    let currentlySelectedObj = null;
+
+    window.onload = function() {
+        // Initialize Leaflet Map
+        map = L.map('leafletMap', { zoomControl: true }).setView([47.1167, 52.3000], 7);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; CARTO',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Set language and initial render
+        changeLanguage('kk');
+    };
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        const t = translations[lang];
+
+        // Update UI Labels
+        document.getElementById('ui-sublogo').innerText = t.sublogo;
+        document.getElementById('ui-nav-home').innerText = t.nav_home;
+        document.getElementById('ui-nav-map').innerText = t.nav_map;
+        document.getElementById('ui-nav-objects').innerText = t.nav_objects;
+        document.getElementById('ui-nav-time').innerText = t.nav_time;
+        document.getElementById('ui-nav-detective').innerText = t.nav_detective;
+
+        document.getElementById('ui-hero-title').innerText = t.hero_title;
+        document.getElementById('ui-hero-desc').innerText = t.hero_desc;
+        document.getElementById('ui-hero-quote').innerText = t.hero_quote;
+
+        document.getElementById('ui-stat1-title').innerText = t.stat1_title;
+        document.getElementById('ui-stat1-sub').innerText = t.stat1_sub;
+        document.getElementById('ui-stat2-title').innerText = t.stat2_title;
+        document.getElementById('ui-stat2-sub').innerText = t.stat2_sub;
+        document.getElementById('ui-stat3-title').innerText = t.stat3_title;
+        document.getElementById('ui-stat3-sub').innerText = t.stat3_sub;
+        document.getElementById('ui-stat4-title').innerText = t.stat4_title;
+        document.getElementById('ui-stat4-sub').innerText = t.stat4_sub;
+
+        document.getElementById('ui-map-title').innerText = t.map_title;
+        document.getElementById('ui-map-subtitle').innerText = t.map_subtitle;
+
+        document.getElementById('ui-btn-all').innerText = t.btn_all;
+        document.getElementById('ui-btn-ancient').innerText = t.btn_ancient;
+        document.getElementById('ui-btn-middle').innerText = t.btn_middle;
+        document.getElementById('ui-btn-modern').innerText = t.btn_modern;
+
+        document.getElementById('mapSearchInput').placeholder = t.search_ph;
+
+        document.getElementById('ui-lg-arch').innerText = t.lg_arch;
+        document.getElementById('ui-lg-city').innerText = t.lg_city;
+        document.getElementById('ui-lg-relig').innerText = t.lg_relig;
+        document.getElementById('ui-lg-person').innerText = t.lg_person;
+
+        document.getElementById('ui-lbl-loc').innerText = t.lbl_loc;
+        document.getElementById('ui-lbl-era').innerText = t.lbl_era;
+        document.getElementById('ui-lbl-type').innerText = t.lbl_type;
+        document.getElementById('ui-btn-full').innerText = t.btn_full;
+
+        document.getElementById('ui-sidebar-title').innerText = t.sidebar_title;
+        document.getElementById('ui-link-all').innerText = t.link_all;
+
+        document.getElementById('ui-qr-instruction').innerText = t.qr_instruction;
+        document.getElementById('ui-btn-qr-close').innerText = t.btn_close;
+        document.getElementById('ui-btn-info-close').innerText = t.btn_close;
+
+        // Re-render markers & sidebar for new language
+        renderMarkers('all');
+        renderPopularSidebar();
+
+        // Refresh popup if opened
+        if (currentlySelectedObj) {
+            selectObjectOnMap(currentlySelectedObj);
+        }
+    }
+
+    function renderMarkers(filterType = 'all', searchQuery = '') {
+        mapMarkers.forEach(m => map.removeLayer(m));
+        mapMarkers = [];
+
+        heritageObjects.forEach((obj) => {
+            const data = obj[currentLang];
+            const matchesFilter = (filterType === 'all' || obj.eraType === filterType);
+            const matchesSearch = data.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                  data.district.toLowerCase().includes(searchQuery.toLowerCase());
+
+            if (matchesFilter && matchesSearch) {
+                const markerHtml = `<div style="background-color: ${obj.color}; width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.35);"></div>`;
+                
+                const customIcon = L.divIcon({
+                    html: markerHtml,
+                    className: '',
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+
+                const marker = L.marker([obj.lat, obj.lng], { icon: customIcon }).addTo(map);
+                marker.on('click', () => selectObjectOnMap(obj));
+                mapMarkers.push(marker);
+            }
+        });
+    }
+
+    function selectObjectOnMap(obj) {
+        currentlySelectedObj = obj;
+        const data = obj[currentLang];
+
+        document.getElementById('popTitle').innerText = data.name;
+        document.getElementById('popLoc').innerText = data.district;
+        document.getElementById('popEra').innerText = data.era;
+        document.getElementById('popType').innerText = data.type;
+        document.getElementById('popDesc').innerText = data.desc;
+        document.getElementById('popImage').src = obj.img;
+
+        document.getElementById('btnFullInfo').onclick = function() {
+            openFullInfoModal(obj);
+        };
+
+        document.getElementById('btnQRCode').onclick = function() {
+            generateQRCode(obj);
+        };
+
+        document.getElementById('mapInfoPopup').style.display = 'block';
+        map.flyTo([obj.lat, obj.lng], 8.5, { duration: 0.8 });
+    }
+
+    function renderPopularSidebar() {
+        const listContainer = document.getElementById('popularItemsList');
+        listContainer.innerHTML = "";
+
+        heritageObjects.forEach(obj => {
+            const data = obj[currentLang];
+            const row = document.createElement('div');
+            row.className = 'popular-item-row';
+            row.onclick = () => selectObjectOnMap(obj);
+            row.innerHTML = `
+                <img class="popular-item-thumb" src="${obj.img}" alt="${data.name}">
+                <div class="popular-item-info">
+                    <h5>${data.name}</h5>
+                    <p>${data.era} • ${obj.distText}</p>
+                </div>
+                <div class="popular-item-arrow">&rsaquo;</div>
+            `;
+            listContainer.appendChild(row);
+        });
+    }
+
+    function applyFilter(filterType, btnElement) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        if (btnElement) btnElement.classList.add('active');
+        
+        const searchVal = document.getElementById('mapSearchInput').value;
+        renderMarkers(filterType, searchVal);
+    }
+
+    function searchObjects() {
+        const searchVal = document.getElementById('mapSearchInput').value;
+        renderMarkers('all', searchVal);
+    }
+
+    function generateQRCode(obj) {
+        const data = obj[currentLang];
+        document.getElementById('qrModalTitle').innerText = data.name;
+        document.getElementById('qrModalMeta').innerText = `${data.district} | ${data.era}`;
+
+        const container = document.getElementById('qrcodeCanvas');
+        container.innerHTML = "";
+
+        const textToEncode = `${data.name}\n${data.district}\n${data.era}\n\n${data.desc}`;
+
+        try {
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(container, {
+                    text: textToEncode,
+                    width: 180,
+                    height: 180,
+                    colorDark: "#024b86",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.L
+                });
+            } else {
+                const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(textToEncode)}`;
+                container.innerHTML = `<img src="${qrApiUrl}" alt="QR Code" style="width:180px; height:180px;">`;
+            }
+        } catch (e) {
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(textToEncode)}`;
+            container.innerHTML = `<img src="${qrApiUrl}" alt="QR Code" style="width:180px; height:180px;">`;
+        }
+
+        document.getElementById('qrModalOverlay').style.display = 'flex';
+    }
+
+    function openFullInfoModal(obj) {
+        const data = obj[currentLang];
+        document.getElementById('infoModalTitle').innerText = data.name;
+        document.getElementById('infoModalMeta').innerText = `${data.district} | ${data.era} | ${data.type}`;
+        document.getElementById('infoModalText').innerText = data.fullDetail || data.desc;
+        document.getElementById('infoModalOverlay').style.display = 'flex';
+    }
+
+    function closePopup() { document.getElementById('mapInfoPopup').style.display = 'none'; currentlySelectedObj = null; }
+    function closeQRModal() { document.getElementById('qrModalOverlay').style.display = 'none'; }
+    function closeInfoModal() { document.getElementById('infoModalOverlay').style.display = 'none'; }
+
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('qrModalOverlay')) closeQRModal();
+        if (event.target === document.getElementById('infoModalOverlay')) closeInfoModal();
+    }
+</script>
